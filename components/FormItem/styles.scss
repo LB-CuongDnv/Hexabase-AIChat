@@ -1,0 +1,9 @@
+@import 'src/assets/scss/variable.scss';
+
+.has-error {
+  input,
+  .ant-select-selector,
+  .input-number {
+    border-color: $color-error !important;
+  }
+}

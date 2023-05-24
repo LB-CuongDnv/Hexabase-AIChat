@@ -1,0 +1,36 @@
+name: web-agent
+on:
+  pull_request:
+    branches:
+      - develop
+    types: [closed]
+jobs:
+  # build:
+  #   runs-on: ubuntu-latest
+
+  #   strategy:
+  #     matrix:
+  #       node-version: [16.x]
+
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #     - name: Install dependencies
+  #       run: yarn install
+  #     - run: yarn run build
+  deploy:
+    name: Deploy
+    if: ${{ github.event.pull_request.merged }}
+    # needs: [build]
+    runs-on: self-hosted
+    steps:
+      - name: deploy
+        run: | # run with multiple script
+          cd /home/debian/source/agents
+          git pull origin develop
+          yarn
+          CI=false yarn build
+          pm2 restart web-agent
